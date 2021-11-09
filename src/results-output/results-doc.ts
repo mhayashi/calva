@@ -255,9 +255,8 @@ export function append(text: string, onAppended?: OnAppendedCallback): void {
             const ansiStrippedText = util.stripAnsi(text);
             if (doc) {
                 const edit = new vscode.WorkspaceEdit();
-                const currentContent = doc.getText();
-                const lastLineEmpty = currentContent.match(/\n$/) || currentContent === '';
-                const appendText = `${lastLineEmpty ? '' : '\n'}${ansiStrippedText}\n`;
+                const appendText = (ansiStrippedText.length == 1024) ?
+                    ansiStrippedText : `${ansiStrippedText}\n`;
                 insertPosition = doc.positionAt(Infinity);
                 edit.insert(DOC_URI(), insertPosition, `${appendText}`);
                 if (scrollToBottomSub) {
